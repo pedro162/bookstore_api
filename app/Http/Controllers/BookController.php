@@ -276,7 +276,7 @@ class BookController extends Controller
 
             \DB::commit();
 
-            $dataToReturn['data']   =>'Store removed successfully';
+            $dataToReturn['data']   =>'Book removed successfully';
             $dataToReturn['state']  =>true;
 
             return response()->json($dataToReturn, 204);
