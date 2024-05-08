@@ -68,6 +68,18 @@ class BookDomain{
 			throw new BookException("Something went wrong. It was not possible to create a new store. Please try again or contact support.");
 		}
 
+		//---- Creating the relationship -----------------------------------------
+		$dataRelationship = [
+			'user_id'=>\Auth::User()->id
+		];
+
+		$relationShip    = $storeObject->addBook($bookObject,$dataRelationship);
+
+		if(! $relationShip){
+			throw new BookException("Something went wrong. It was not possible to create a new store. Please try again or contact support.");
+		}
+
+
 		return $bookObject;
 	}
 
@@ -152,7 +164,7 @@ class BookDomain{
 		//----- try to get the store relationship records --------------------------
 		$dataStores = $bookObject->store();//->atach();
 		
-		//------- Brake the relationship --------------------------------------------
+		//------- Break the relationship --------------------------------------------
 		if($dataStores){
 			foreach($dataStores as $store){
 				if($store){
