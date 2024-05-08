@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class BookController extends Controller
+class UserController extends Controller
 {
     public function __construct(){
         header('Access-Control-Allow-Origin: *');

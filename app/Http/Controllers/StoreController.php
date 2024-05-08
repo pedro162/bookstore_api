@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Domain\StoreDomain;
+use App\Exceptions\StoreException;
 
 class StoreController extends Controller
 {
+    public function __construct(){
+        header('Access-Control-Allow-Origin: *');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -19,7 +24,8 @@ class StoreController extends Controller
      */
     public function create()
     {
-        //
+
+        
     }
 
     /**
@@ -27,7 +33,26 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $dados = $request->all();            
+            
+            $storeDomainObj = new StoreDomain();
+            $storeDomainObj->create($dados);
+
+        } catch (StoreException $e) {
+            $msg  = $e->getMessage();
+            return response()->json(['error' => $msg], 401);
+
+        }catch (\Exception $e) {
+            $msg  = $e->getMessage();
+            return response()->json(['error' => $msg], 500);
+
+        }catch (\Error $e) {
+            $msg  = $e->getMessage();
+            return response()->json(['error' => $msg], 500);
+            
+        }
     }
 
     /**
@@ -51,7 +76,26 @@ class StoreController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+
+            $dados = $request->all();            
+            
+            $storeDomainObj = new StoreDomain();
+            $storeDomainObj->update($id, $dados);
+
+        } catch (StoreException $e) {
+            $msg  = $e->getMessage();
+            return response()->json(['error' => $msg], 401);
+
+        }catch (\Exception $e) {
+            $msg  = $e->getMessage();
+            return response()->json(['error' => $msg], 500);
+
+        }catch (\Error $e) {
+            $msg  = $e->getMessage();
+            return response()->json(['error' => $msg], 500);
+            
+        }
     }
 
     /**
