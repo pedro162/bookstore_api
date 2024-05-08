@@ -2,6 +2,8 @@
 
 namespace App\Validators;
 
+use Illuminate\Support\Facades\Validator;
+
 class StoreValidator{
 	/**
      * Validate the basic information to create a new user and return an array with the errors, if they exist

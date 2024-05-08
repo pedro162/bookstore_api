@@ -2,6 +2,8 @@
 
 namespace App\Validators;
 
+use Illuminate\Support\Facades\Validator;
+
 class BookValidator{
 	/**
      * Validate the basic informations to create a new book and return an array with the errors, if they exist
@@ -21,8 +23,8 @@ value*/
 		],
 		[
 			'name.required'=>'The book name is required',
-			'name.required'=>'The book name needs to have at least :min characters and a maximum :max 255 characters',
-			'name.required'=>'The book name needs to have at least :min characters and a maximum :max 255 characters',
+			'name.required'=>'The book name needs to have at least 1 characters and a maximum 255 characters',
+			'name.required'=>'The book name needs to have at least 1 characters and a maximum 255 characters',
 
 			'value.regex'=>'The book value needs to be in a decimal format',
 			'isbn.regex'=>'The book isbn field just acept numeric values',

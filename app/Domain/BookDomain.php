@@ -3,7 +3,7 @@
 namespace App\Domain;
 
 use Illuminate\Support\Facades\Auth;
-use App\Exception\BookException;
+use App\Exceptions\BookException;
 use App\Models\User;
 use App\Models\Book;
 use App\Models\Store;
@@ -11,24 +11,6 @@ use App\Validators\BookValidator;
 
 class BookDomain
 {
-
-
-	/*
-		INFO  Password grant client created successfully.  
-
-	  Client ID ................................................................ 3  
-	  Client secret ..................... b6TiKYqXgNpKAiiZ0pkyLq2QPXPEzOS8ARwPBMqJ
-	  
-	  //---- AS I'm using docker enviroment, I need to running these commands
-	  chmod -R 775 storage
-	  chmod -R 775 bootstrap/cache
-
-	sudo chmod -R 775 /var/www/html/bookstore_api/storage
-sudo chown -R www-data:www-data /var/www/html/bookstore_api/storage
-
-	*/
-
-
 	public function index()
 	{
 
@@ -38,7 +20,34 @@ sudo chown -R www-data:www-data /var/www/html/bookstore_api/storage
 		return $result;
 	}
 
-	public function create(string $idStore, array $data = [])
+	public function create(array $data = [])
+	{
+
+		//----- Select only the necessary informations ---------------------------
+		$dataToBook = [
+			'name'			=> $data['name'] 			?? '',
+			'isbn'			=> $data['isbn'] 			?? '',
+			'value'			=> $data['value']			?? '',
+			'user_id'		=> \Auth::User()->id		?? '',
+		];
+
+		//----- Validate infomations ----------------------------------------------
+		$erros = BookValidator::validateDataToCreateBook($dataToBook);
+		if (is_array($erros) && count($erros) > 0) {
+
+			$strErros = implode(', ', $erros);
+			throw new BookException($strErros);
+		}
+
+		$bookObject = Book::create($dataToBook);
+		if (!$bookObject) {
+			throw new BookException("Something went wrong. It was not possible to create a new store. Please try again or contact support.");
+		}
+
+		return $bookObject;
+	}
+
+	public function create_fast(string $idStore, array $data = [])
 	{
 
 		$idStore = (int) $idStore;
@@ -82,7 +91,8 @@ sudo chown -R www-data:www-data /var/www/html/bookstore_api/storage
 		$relationShip    = $storeObject->addBook($bookObject, $dataRelationship);
 
 		if (!$relationShip) {
-			throw new BookException("Something went wrong. It was not possible to create a new store. Please try again or contact support.");
+			$book_id = $bookObject->id;
+			throw new BookException("Something went wrong. It was not possible to create the relationship between the store {$idStore} and the book {$book_id}. Please try again or contact support.");
 		}
 
 
@@ -117,11 +127,19 @@ sudo chown -R www-data:www-data /var/www/html/bookstore_api/storage
 			throw new BookException($strErro);
 		}
 
+		//----- Try to load the record -------------------------------------------
+
+		$bookObject = Book::find($id);
+		if (!$bookObject) {
+			$strErro = "It was not possible to locale the record of code number {$id}";
+			throw new BookException($strErro);
+		}
+
 		//----- Select only the necessary informations ---------------------------
 		$dataToBook = [
-			'name'				=> $data['name'] 			?? '',
-			'isbn'				=> $data['isbn'] 			?? '',
-			'value'				=> $data['value']			?? '',
+			'name'				=> $data['name'] 			?? $bookObject->name,
+			'isbn'				=> $data['isbn'] 			?? $bookObject->isbn,
+			'value'				=> $data['value']			?? $bookObject->value,
 			'user_update_id'	=> \Auth::User()->id		?? '',
 		];
 
@@ -131,15 +149,6 @@ sudo chown -R www-data:www-data /var/www/html/bookstore_api/storage
 
 			$strErros = implode(', ', $erros);
 			throw new BookException($strErros);
-		}
-
-
-		//----- Try to load the record -------------------------------------------
-
-		$bookObject = Book::find($id);
-		if (!$bookObject) {
-			$strErro = "It was not possible to locale the record of code number {$id}";
-			throw new BookException($strErro);
 		}
 
 		//----- Update to load the record -------------------------------------------
@@ -164,7 +173,7 @@ sudo chown -R www-data:www-data /var/www/html/bookstore_api/storage
 		//----- Try to load the record -------------------------------------------
 		$bookObject = Book::find($id);
 		if (!$bookObject) {
-			$strErro = "It was not possible to locale the store of code number {$id}";
+			$strErro = "It was not possible to locale the book of code number {$id}";
 			throw new BookException($strErro);
 		}
 
@@ -179,8 +188,6 @@ sudo chown -R www-data:www-data /var/www/html/bookstore_api/storage
 				}
 			}
 		}
-
-
 
 		//---- Turn the record inactivated ------------
 		$dataToBook = ['active' => 'no'];

@@ -10,7 +10,6 @@ use App\Models\Book;
 
 class StoreDomain{
 
-
 	public function index(){
 
 		//----- Select active records ---------------------------------------
@@ -28,7 +27,6 @@ class StoreDomain{
 			'active'		=> $data['active'] 			?? 'yes',
 			'user_id'		=> \Auth::User()->id		?? '',
 		];
-
 
 		//----- Validate infomations ----------------------------------------------
 		$erros = StoreValidator::validateDataToCreateStore($dataToStore);
@@ -66,8 +64,6 @@ class StoreDomain{
 			///throw new StoreException($strErro);
 		}
 
-		
-
 		return $storeObject;
     }
 
@@ -83,10 +79,18 @@ class StoreDomain{
 			throw new StoreException($strErro);
 		}
 
+		//----- Try to load the record -------------------------------------------
+
+		$storeObject = Store::find($id);
+		if(!$storeObject){
+			$strErro = "It was not possible to locale the record of code number {$id}";
+			throw new StoreException($strErro);
+		}
+
 		//----- Select only the necessary informations ---------------------------
 		$dataToStore = [
-			'name'				=> $data['name'] 			?? '',
-			'address'			=> $data['address'] 		?? '',
+			'name'				=> $data['name'] 			?? $storeObject->name,
+			'address'			=> $data['address'] 		?? $storeObject->address,
 			'user_update_id'	=> \Auth::User()->id		?? '',
 		];
 
@@ -96,15 +100,6 @@ class StoreDomain{
 			
 			$strErros = implode(', ', $erros);
 			throw new StoreException($strErros);
-		}
-
-
-		//----- Try to load the record -------------------------------------------
-
-		$storeObject = Store::find($id);
-		if(!$storeObject){
-			$strErro = "It was not possible to locale the record of code number {$id}";
-			throw new StoreException($strErro);
 		}
 
 		//----- Update to load the record -------------------------------------------
@@ -154,4 +149,36 @@ class StoreDomain{
 
 		return true;
     }
+
+    public function add_boock(string $store_id, string $book_id, array $data=[]){
+
+    	//----- Try to load the store record -------------------------------------------
+        $storeObject = Store::find($store_id);
+		if(!$storeObject){
+			$strErro = "It was not possible to locale the store of code number {$store_id}";
+			throw new StoreException($strErro);
+		}
+
+		//----- Try to load the book record -------------------------------------------
+		$bookObject = Book::find($book_id);
+		if (!$bookObject) {
+			$strErro = "It was not possible to locale the book of code number {$book_id}";
+			throw new StoreException($strErro);
+		}
+
+
+
+		//---- Creating the relationship -----------------------------------------
+		$dataRelationship = [
+			'user_id' => \Auth::User()->id
+		];
+		$relationShip    = $storeObject->addBook($bookObject, $dataRelationship);
+
+		if (!$relationShip) {
+			$book_id = $bookObject->id;
+			throw new StoreException("Something went wrong. It was not possible to create the relationship between the store {$idStore} and the book {$book_id}. Please try again or contact support.");
+		}
+
+		return $storeObject;
+    } 
 }

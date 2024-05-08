@@ -50,11 +50,11 @@ RUN chown -R www-data:www-data /var/www/html/bookstore_api
 RUN chmod -R 755 /var/www/html/bookstore_api
 
 #
-RUN chmod -R 775 storage
-RUN chmod -R 775 bootstrap/cache
+#RUN chmod -R 775 storage
+#RUN chmod -R 775 bootstrap/cache
 
-RUN sudo chmod -R 775 /var/www/html/bookstore_api/storage
-RUN sudo chown -R www-data:www-data /var/www/html/bookstore_api/storage
+#RUN sudo chmod -R 775 /var/www/html/bookstore_api/storage
+#RUN sudo chown -R www-data:www-data /var/www/html/bookstore_api/storage
 
 
 # Configure o Apache para apontar diretamente para o diretório public do Laravel e escutar na porta 80

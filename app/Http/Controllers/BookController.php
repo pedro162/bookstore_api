@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use App\Domain\BookDomain;
 use App\Exceptions\BookException;
 use App\Http\Controllers\Controller;
-
-
+use App\Builder\BookBuilder;
 
 class BookController extends Controller
 {
@@ -21,126 +20,34 @@ class BookController extends Controller
      */
     public function index()
     {
-        $dataToReturn = [
-            'data'  =>  [],
-            'state' =>  false
-        ];
-        
-        $stCod = 200;
+       
+        $objBuilder         = new BookBuilder();
+        $dataToReturn       = $objBuilder->index();
 
-        try {
-
-            \DB::beginTransaction();
-            
-            $storeDomainObj = new BookDomain();
-            $response = $storeDomainObj->index();
-
-            \DB::commit();
-            //print_r($response);
-            //die();
-            if((!$response) || !(count($response) > 0)){
-                $stCod = 404;
-            }
-
-            $dataToReturn['data']   = $response;
-            $dataToReturn['state']  = true;
-
-            return response()->json($dataToReturn, $stCod);
-
-        } catch (BookException $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 400);
-
-        }catch (\Exception $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 500);
-
-        }catch (\Error $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-            return response()->json($dataToReturn, 500);
-            
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
         }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $id)
+    public function store(Request $request)
     {
-        $dataToReturn = [
-            'data'      => [],
-            'status'    => false
-        ];
+        
+        $objBuilder         = new BookBuilder();
+        $dataToReturn       = $objBuilder->store($request);
 
-        try {
-
-            \DB::beginTransaction();
-
-            $data = $request->all();            
-            
-            $storeDomainObj = new BookDomain();
-            $response = $storeDomainObj->create($data);
-
-            \DB::commit();
-
-
-            $dataToReturn['data']   = $response;
-            $dataToReturn['state']  = true;
-
-            return response()->json($dataToReturn, 200);
-
-        } catch (BookException $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 400);
-
-        }catch (\Exception $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 500);
-
-        }catch (\Error $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-            return response()->json($dataToReturn, 500);
-            
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
         }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
     /**
@@ -148,64 +55,16 @@ class BookController extends Controller
      */
     public function show(string $id)
     {
-        $dataToReturn = [
-            'data'  =>  [],
-            'status'=>  false
-        ];
+        
+        $objBuilder         = new BookBuilder();
+        $dataToReturn       = $objBuilder->show($id);
 
-        $stCod = 200;
-
-        try {
-
-            \DB::beginTransaction();
-
-            $storeDomainObj = new BookDomain();
-            $response = $storeDomainObj->show($id);
-
-            \DB::commit();
-
-
-            if(!$response){
-                $stCod = 404;
-            }
-
-            $dataToReturn['data']   = $response;
-            $dataToReturn['state']  = true;
-
-            return response()->json($dataToReturn, $stCod);
-
-        } catch (BookException $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 400);
-
-        }catch (\Exception $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 500);
-
-        }catch (\Error $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-            return response()->json($dataToReturn, 500);
-            
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
         }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
     /**
@@ -213,61 +72,16 @@ class BookController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $dataToReturn = [
-            'data'      =>  [],
-            'status'    =>  false
-        ];
+       
+        $objBuilder         = new BookBuilder();
+        $dataToReturn       = $objBuilder->update($request, $id);
 
-        try {
-
-            \DB::beginTransaction();
-
-
-            $data = $request->all();            
-            
-            $storeDomainObj = new BookDomain();
-            $response = $storeDomainObj->update($id, $data);
-
-
-            \DB::commit();
-
-            $dataToReturn['data']   = $response;
-            $dataToReturn['state']  = true;
-
-            return response()->json($dataToReturn, 200);
-
-        } catch (BookException $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 400);
-
-        }catch (\Exception $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 500);
-
-        }catch (\Error $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-            return response()->json($dataToReturn, 500);
-            
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
         }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
     /**
@@ -275,60 +89,15 @@ class BookController extends Controller
      */
     public function destroy(string $id)
     {
-        $dataToReturn = [
-            'data'  =>  [],
-            'status'=>  false
-        ];
         
-        try {
+        $objBuilder         = new BookBuilder();
+        $dataToReturn       = $objBuilder->destroy($id);
 
-            \DB::beginTransaction();
-
-
-            $dados = $request->all();            
-            
-            $storeDomainObj = new BookDomain();
-            $response       = $storeDomainObj->destroy($id);
-
-
-            \DB::commit();
-
-            $dataToReturn['data']   = 'Book removed successfully';
-            $dataToReturn['state']  = true;
-
-            return response()->json($dataToReturn, 204);
-
-        } catch (BookException $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 400);
-
-        }catch (\Exception $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 500);
-
-        }catch (\Error $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-            return response()->json($dataToReturn, 500);
-            
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
         }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 }

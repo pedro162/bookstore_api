@@ -10,7 +10,6 @@ use App\Validators\UserValidator;
 
 class UserDomain{
 
-
 	public function index(){
 
 	}
@@ -28,7 +27,6 @@ class UserDomain{
 
 		return $result;
 	}
-
 
     /**
      * Display the specified resource.
