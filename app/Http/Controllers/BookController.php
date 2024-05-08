@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+//use Illuminate\Http\Request;
 use Illuminate\Http\Request;
 use App\Domain\BookDomain;
 use App\Exceptions\BookException;
+use App\Http\Controllers\Controller;
+
+
 
 class BookController extends Controller
 {
@@ -18,24 +22,30 @@ class BookController extends Controller
     public function index()
     {
         $dataToReturn = [
-            'data'=>    null,
-            'status'=>  false
+            'data'  =>  [],
+            'state' =>  false
         ];
+        
+        $stCod = 200;
 
         try {
 
             \DB::beginTransaction();
             
             $storeDomainObj = new BookDomain();
-            $respone = $storeDomainObj->index();
+            $response = $storeDomainObj->index();
 
             \DB::commit();
+            //print_r($response);
+            //die();
+            if((!$response) || !(count($response) > 0)){
+                $stCod = 404;
+            }
 
+            $dataToReturn['data']   = $response;
+            $dataToReturn['state']  = true;
 
-            $dataToReturn['data']   =>$respone;
-            $dataToReturn['state']  =>true;
-
-            return response()->json($dataToReturn, 200);
+            return response()->json($dataToReturn, $stCod);
 
         } catch (BookException $e) {
 
@@ -43,8 +53,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -54,8 +64,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -64,8 +74,8 @@ class BookController extends Controller
             \DB::rollback();
 
             $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }
@@ -75,11 +85,11 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
         $dataToReturn = [
-            'data'=>    null,
-            'status'=>  false
+            'data'      => [],
+            'status'    => false
         ];
 
         try {
@@ -89,13 +99,13 @@ class BookController extends Controller
             $dados = $request->all();            
             
             $storeDomainObj = new BookDomain();
-            $respone = $storeDomainObj->create($dados);
+            $response = $storeDomainObj->create($dados);
 
             \DB::commit();
 
 
-            $dataToReturn['data']   =>$respone;
-            $dataToReturn['state']  =>true;
+            $dataToReturn['data']   = $response;
+            $dataToReturn['state']  = true;
 
             return response()->json($dataToReturn, 200);
 
@@ -105,8 +115,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -116,8 +126,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -126,8 +136,8 @@ class BookController extends Controller
             \DB::rollback();
 
             $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }
@@ -139,23 +149,30 @@ class BookController extends Controller
     public function show(string $id)
     {
         $dataToReturn = [
-            'data'=>    null,
+            'data'  =>  [],
             'status'=>  false
         ];
+
+        $stCod = 200;
 
         try {
 
             \DB::beginTransaction();
 
             $storeDomainObj = new BookDomain();
-            $respone = $storeDomainObj->show($id);
+            $response = $storeDomainObj->show($id);
 
             \DB::commit();
 
-            $dataToReturn['data']   =>$respone;
-            $dataToReturn['state']  =>true;
 
-            return response()->json($dataToReturn, 200);
+            if(!$response){
+                $stCod = 404;
+            }
+
+            $dataToReturn['data']   = $response;
+            $dataToReturn['state']  = true;
+
+            return response()->json($dataToReturn, $stCod);
 
         } catch (BookException $e) {
 
@@ -163,8 +180,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -174,8 +191,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -184,8 +201,8 @@ class BookController extends Controller
             \DB::rollback();
 
             $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }
@@ -197,8 +214,8 @@ class BookController extends Controller
     public function update(Request $request, string $id)
     {
         $dataToReturn = [
-            'data'=>    null,
-            'status'=>  false
+            'data'      =>  [],
+            'status'    =>  false
         ];
 
         try {
@@ -209,13 +226,13 @@ class BookController extends Controller
             $dados = $request->all();            
             
             $storeDomainObj = new BookDomain();
-            $respone = $storeDomainObj->update($id, $dados);
+            $response = $storeDomainObj->update($id, $dados);
 
 
             \DB::commit();
 
-            $dataToReturn['data']   =>$respone;
-            $dataToReturn['state']  =>true;
+            $dataToReturn['data']   = $response;
+            $dataToReturn['state']  = true;
 
             return response()->json($dataToReturn, 200);
 
@@ -225,8 +242,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -236,8 +253,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -246,8 +263,8 @@ class BookController extends Controller
             \DB::rollback();
 
             $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }
@@ -259,7 +276,7 @@ class BookController extends Controller
     public function destroy(string $id)
     {
         $dataToReturn = [
-            'data'=>    null,
+            'data'  =>  [],
             'status'=>  false
         ];
         
@@ -271,13 +288,13 @@ class BookController extends Controller
             $dados = $request->all();            
             
             $storeDomainObj = new BookDomain();
-            $respone = $storeDomainObj->destroy($id);
+            $response       = $storeDomainObj->destroy($id);
 
 
             \DB::commit();
 
-            $dataToReturn['data']   =>'Book removed successfully';
-            $dataToReturn['state']  =>true;
+            $dataToReturn['data']   = 'Book removed successfully';
+            $dataToReturn['state']  = true;
 
             return response()->json($dataToReturn, 204);
 
@@ -287,8 +304,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -298,8 +315,8 @@ class BookController extends Controller
 
             $msg  = $e->getMessage();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -308,8 +325,8 @@ class BookController extends Controller
             \DB::rollback();
 
             $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }

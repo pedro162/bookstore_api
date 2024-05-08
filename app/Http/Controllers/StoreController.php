@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+//use Illuminate\Http\Request;
+//use App\Http\Controllers\Request;
 use Illuminate\Http\Request;
 use App\Domain\StoreDomain;
 use App\Exceptions\StoreException;
@@ -18,24 +20,28 @@ class StoreController extends Controller
     public function index()
     {
         $dataToReturn = [
-            'data'=>    null,
-            'status'=>  false
+            'data'  => [],
+            'state' => false
         ];
+        $stCod = 200;
 
         try {
 
             \DB::beginTransaction();
             
             $storeDomainObj = new StoreDomain();
-            $respone = $storeDomainObj->index();
+            $response = $storeDomainObj->index();
 
             \DB::commit();
 
+            if((!$response) || !(count($response) > 0)){
+                $stCod = 404;
+            }
 
-            $dataToReturn['data']   =>$respone;
-            $dataToReturn['state']  =>true;
+            $dataToReturn['data']   = $response;
+            $dataToReturn['state']  =true;
 
-            return response()->json($dataToReturn, 200);
+            return response()->json($dataToReturn, $stCod);
 
         } catch (StoreException $e) {
 
@@ -43,8 +49,8 @@ class StoreController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -54,8 +60,8 @@ class StoreController extends Controller
 
             $msg  = $e->getMessage();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -64,8 +70,8 @@ class StoreController extends Controller
             \DB::rollback();
 
             $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }
@@ -78,8 +84,8 @@ class StoreController extends Controller
     public function store(Request $request)
     {
         $dataToReturn = [
-            'data'=>    null,
-            'status'=>  false
+            'data'  => [],
+            'status'=> false
         ];
 
         try {
@@ -89,13 +95,13 @@ class StoreController extends Controller
             $dados = $request->all();            
             
             $storeDomainObj = new StoreDomain();
-            $respone = $storeDomainObj->create($dados);
+            $response       = $storeDomainObj->create($dados);
 
             \DB::commit();
 
 
-            $dataToReturn['data']   =>$respone;
-            $dataToReturn['state']  =>true;
+            $dataToReturn['data']   = $response;
+            $dataToReturn['state']  = true;
 
             return response()->json($dataToReturn, 200);
 
@@ -105,8 +111,8 @@ class StoreController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -114,10 +120,10 @@ class StoreController extends Controller
 
             \DB::rollback();
 
-            $msg  = $e->getMessage();
+            $msg  = $e->getMessage().' - '.$e->getLine();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -125,9 +131,10 @@ class StoreController extends Controller
 
             \DB::rollback();
 
-            $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            //$msg  = $e->getMessage().' - '.$e->getLine().' - '.$e->getFile();
+            $msg  = $e->getMessage().' - '.$e->getLine().' - '.$e->getFile();
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }
@@ -139,23 +146,27 @@ class StoreController extends Controller
     public function show(string $id)
     {
         $dataToReturn = [
-            'data'=>    null,
-            'status'=>  false
+            'data'  => [],
+            'status'=> false
         ];
+
+        $stCod = 200;
 
         try {
 
             \DB::beginTransaction();
 
             $storeDomainObj = new StoreDomain();
-            $respone = $storeDomainObj->show($id);
+            $response = $storeDomainObj->show($id);
 
             \DB::commit();
+            if(!$response){
+                $stCod = 404;
+            }
+            $dataToReturn['data']   = $response;
+            $dataToReturn['state']  = true;
 
-            $dataToReturn['data']   =>$respone;
-            $dataToReturn['state']  =>true;
-
-            return response()->json($dataToReturn, 200);
+            return response()->json($dataToReturn, $stCod);
 
         } catch (StoreException $e) {
 
@@ -163,8 +174,8 @@ class StoreController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -174,8 +185,8 @@ class StoreController extends Controller
 
             $msg  = $e->getMessage();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -184,8 +195,8 @@ class StoreController extends Controller
             \DB::rollback();
 
             $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }
@@ -197,8 +208,8 @@ class StoreController extends Controller
     public function update(Request $request, string $id)
     {
         $dataToReturn = [
-            'data'=>    null,
-            'status'=>  false
+            'data'      => [],
+            'status'    => false
         ];
 
         try {
@@ -209,13 +220,13 @@ class StoreController extends Controller
             $dados = $request->all();            
             
             $storeDomainObj = new StoreDomain();
-            $respone = $storeDomainObj->update($id, $dados);
+            $response = $storeDomainObj->update($id, $dados);
 
 
             \DB::commit();
 
-            $dataToReturn['data']   =>$respone;
-            $dataToReturn['state']  =>true;
+            $dataToReturn['data']   = $response;
+            $dataToReturn['state']  = true;
 
             return response()->json($dataToReturn, 200);
 
@@ -225,8 +236,8 @@ class StoreController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -236,8 +247,8 @@ class StoreController extends Controller
 
             $msg  = $e->getMessage();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -246,8 +257,8 @@ class StoreController extends Controller
             \DB::rollback();
 
             $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }
@@ -259,8 +270,8 @@ class StoreController extends Controller
     public function destroy(string $id)
     {
         $dataToReturn = [
-            'data'=>    null,
-            'status'=>  false
+            'data'      => [],
+            'status'    => false
         ];
         
         try {
@@ -271,13 +282,13 @@ class StoreController extends Controller
             $dados = $request->all();            
             
             $storeDomainObj = new StoreDomain();
-            $respone = $storeDomainObj->destroy($id);
+            $response = $storeDomainObj->destroy($id);
 
 
             \DB::commit();
 
-            $dataToReturn['data']   =>'Store removed successfully';
-            $dataToReturn['state']  =>true;
+            $dataToReturn['data']   = 'Store removed successfully';
+            $dataToReturn['state']  = true;
 
             return response()->json($dataToReturn, 204);
 
@@ -287,8 +298,8 @@ class StoreController extends Controller
 
             $msg  = $e->getMessage();
             
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 400);
 
@@ -298,8 +309,8 @@ class StoreController extends Controller
 
             $msg  = $e->getMessage();
 
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
 
             return response()->json($dataToReturn, 500);
 
@@ -308,8 +319,8 @@ class StoreController extends Controller
             \DB::rollback();
 
             $msg  = $e->getMessage();
-            $dataToReturn['data']   =>$msg;
-            $dataToReturn['state']  =>false;
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
             
         }

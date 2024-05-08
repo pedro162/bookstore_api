@@ -4,7 +4,7 @@ namespace App\Domain;
 
 use Illuminate\Support\Facades\Auth; 
 use App\Exception\UserException;
-use App\User;
+use App\Models\User;
 use App\Validators\UserValidator;
 
 

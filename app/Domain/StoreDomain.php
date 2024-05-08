@@ -2,10 +2,10 @@
 
 namespace App\Domain;
 
-use App\Validators\StoreException;
-use Illuminate\Support\Facades\Auth; 
 use App\Validators\StoreValidator;
-use App\Store;
+use Illuminate\Support\Facades\Auth; 
+use App\Exceptions\StoreException;
+use App\Models\Store;
 
 class StoreDomain{
 
@@ -61,21 +61,11 @@ class StoreDomain{
 
 		$storeObject = Store::find($id);
 		if(!$storeObject){
-			$strErro = "It was not possible to locale the record of code number {$id}";
-			throw new StoreException($strErro);
+			//$strErro = "It was not possible to locale the record of code number {$id}";
+			///throw new StoreException($strErro);
 		}
 
-		$dataBooks = $storeObject->book();
-		//------- Break the relationship witho book --------------------------------
-		if($dataBooks){
-			foreach($dataBooks as $book){
-				if($book){
-					$storeObject->removeBook($book);
-				}
-			}
-		}
-
-
+		
 
 		return $storeObject;
     }
@@ -84,7 +74,7 @@ class StoreDomain{
 	/**
      * Update the specified resource in storage.
      */
-	public function update(sting $id , array $data = []){
+	public function update(string $id , array $data = []){
 		$id = (int) $id;
 
 		if(!($id > 0)){
@@ -145,6 +135,18 @@ class StoreDomain{
 		//---- Turn the record inactivated ------------
 		$dataToStore = ['active'=>'no'];
 		$storeObject->update($dataToStore);
+
+		$dataBooks = $storeObject->book();
+		//------- Break the relationship witho book --------------------------------
+		if($dataBooks){
+			foreach($dataBooks as $book){
+				if($book){
+					$storeObject->removeBook($book);
+				}
+			}
+		}
+
+
 		
 		//---- I'm using soft delete, that's why I can do this ------------
 		$storeObject->delete();

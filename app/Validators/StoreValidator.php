@@ -7,7 +7,7 @@ class StoreValidator{
      * Validate the basic information to create a new user and return an array with the errors, if they exist
      */
 
-	public function validateDataToCreateStore(array $data = []):array{
+	public static function validateDataToCreateStore(array $data = []):array{
 
 		/*name
 		address
@@ -37,6 +37,6 @@ class StoreValidator{
 			$errors = $errorsObject->all();
 		}*/
 
-		return $errors
+		return $errors;
 	}
 }

@@ -37,7 +37,7 @@ class UserValidator{
 			$errors = $errorsObject->all();
 		}
 
-		return $errors
+		return $errors;
 	}
 
 	

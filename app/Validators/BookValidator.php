@@ -7,7 +7,7 @@ class BookValidator{
      * Validate the basic informations to create a new book and return an array with the errors, if they exist
      */
 
-	public function validateDataToCreateBook(array $data = []):array{
+	public static function validateDataToCreateBook(array $data = []):array{
 
 		/*name
 isbn
@@ -33,6 +33,6 @@ value*/
 			$errors = $errorsObject->all();
 		}
 
-		return $errors
+		return $errors;
 	}
 }
