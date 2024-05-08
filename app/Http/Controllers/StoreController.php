@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-abstract class Controller
+use Illuminate\Http\Request;
+
+class StoreController extends Controller
 {
     /**
      * Display a listing of the resource.

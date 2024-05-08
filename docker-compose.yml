@@ -1,14 +1,15 @@
 version: '3'
 services:
   app:
-    container_name: app_messages
+    container_name: bookstore_api
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - 9000:80
     volumes:
-      - .:/var/www/html/app_messages
+      - .:/var/www/html/bookstore_api
+    #network_mode: "host"
     environment:
       - UID=${UID}
       - GID=${GID}
