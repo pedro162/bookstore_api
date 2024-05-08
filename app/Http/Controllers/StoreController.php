@@ -11,46 +11,124 @@ class StoreController extends Controller
     public function __construct(){
         header('Access-Control-Allow-Origin: *');
     }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $dataToReturn = [
+            'data'=>    null,
+            'status'=>  false
+        ];
+
+        try {
+
+            \DB::beginTransaction();
+            
+            $storeDomainObj = new StoreDomain();
+            $respone = $storeDomainObj->index();
+
+            \DB::commit();
+
+
+            $dataToReturn['data']   =>$respone;
+            $dataToReturn['state']  =>true;
+
+            return response()->json($dataToReturn, 200);
+
+        } catch (StoreException $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+            
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 400);
+
+        }catch (\Exception $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 500);
+
+        }catch (\Error $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+            return response()->json($dataToReturn, 500);
+            
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-
-        
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        $dataToReturn = [
+            'data'=>    null,
+            'status'=>  false
+        ];
+
         try {
+
+            \DB::beginTransaction();
 
             $dados = $request->all();            
             
             $storeDomainObj = new StoreDomain();
-            $storeDomainObj->create($dados);
+            $respone = $storeDomainObj->create($dados);
+
+            \DB::commit();
+
+
+            $dataToReturn['data']   =>$respone;
+            $dataToReturn['state']  =>true;
+
+            return response()->json($dataToReturn, 200);
 
         } catch (StoreException $e) {
+
+            \DB::rollback();
+
             $msg  = $e->getMessage();
-            return response()->json(['error' => $msg], 401);
+            
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 400);
 
         }catch (\Exception $e) {
+
+            \DB::rollback();
+
             $msg  = $e->getMessage();
-            return response()->json(['error' => $msg], 500);
+
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 500);
 
         }catch (\Error $e) {
+
+            \DB::rollback();
+
             $msg  = $e->getMessage();
-            return response()->json(['error' => $msg], 500);
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+            return response()->json($dataToReturn, 500);
             
         }
     }
@@ -60,15 +138,57 @@ class StoreController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
+        $dataToReturn = [
+            'data'=>    null,
+            'status'=>  false
+        ];
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        try {
+
+            \DB::beginTransaction();
+
+            $storeDomainObj = new StoreDomain();
+            $respone = $storeDomainObj->show($id);
+
+            \DB::commit();
+
+            $dataToReturn['data']   =>$respone;
+            $dataToReturn['state']  =>true;
+
+            return response()->json($dataToReturn, 200);
+
+        } catch (StoreException $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+            
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 400);
+
+        }catch (\Exception $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 500);
+
+        }catch (\Error $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+            return response()->json($dataToReturn, 500);
+            
+        }
     }
 
     /**
@@ -76,24 +196,59 @@ class StoreController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $dataToReturn = [
+            'data'=>    null,
+            'status'=>  false
+        ];
+
         try {
+
+            \DB::beginTransaction();
+
 
             $dados = $request->all();            
             
             $storeDomainObj = new StoreDomain();
-            $storeDomainObj->update($id, $dados);
+            $respone = $storeDomainObj->update($id, $dados);
+
+
+            \DB::commit();
+
+            $dataToReturn['data']   =>$respone;
+            $dataToReturn['state']  =>true;
+
+            return response()->json($dataToReturn, 200);
 
         } catch (StoreException $e) {
+
+            \DB::rollback();
+
             $msg  = $e->getMessage();
-            return response()->json(['error' => $msg], 401);
+            
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 400);
 
         }catch (\Exception $e) {
+
+            \DB::rollback();
+
             $msg  = $e->getMessage();
-            return response()->json(['error' => $msg], 500);
+
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 500);
 
         }catch (\Error $e) {
+
+            \DB::rollback();
+
             $msg  = $e->getMessage();
-            return response()->json(['error' => $msg], 500);
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+            return response()->json($dataToReturn, 500);
             
         }
     }
@@ -103,6 +258,60 @@ class StoreController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $dataToReturn = [
+            'data'=>    null,
+            'status'=>  false
+        ];
+        
+        try {
+
+            \DB::beginTransaction();
+
+
+            $dados = $request->all();            
+            
+            $storeDomainObj = new StoreDomain();
+            $respone = $storeDomainObj->destroy($id);
+
+
+            \DB::commit();
+
+            $dataToReturn['data']   =>'Store removed successfully';
+            $dataToReturn['state']  =>true;
+
+            return response()->json($dataToReturn, 204);
+
+        } catch (StoreException $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+            
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 400);
+
+        }catch (\Exception $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+
+            return response()->json($dataToReturn, 500);
+
+        }catch (\Error $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+            $dataToReturn['data']   =>$msg;
+            $dataToReturn['state']  =>false;
+            return response()->json($dataToReturn, 500);
+            
+        }
     }
 }

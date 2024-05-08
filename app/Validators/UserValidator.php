@@ -15,7 +15,7 @@ class UserValidator{
 		$errors = [];
 		$validator = Validator::make($data, [
 			'name'=>'required|min:1|max:255',
-			'email'=>'required|min:1|max:255',
+			'email'=>'required|min:1|max:255|email',
 			'password'=>'required|min:1|max:255',
 		], [
 			'name.required'=>'The user name is required',

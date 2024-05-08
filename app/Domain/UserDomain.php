@@ -4,7 +4,9 @@ namespace App\Domain;
 
 use Illuminate\Support\Facades\Auth; 
 use App\Exception\UserException;
-use App\ User;
+use App\User;
+use App\Validators\UserValidator;
+
 
 class UserDomain{
 
@@ -17,7 +19,7 @@ class UserDomain{
 		$dataToStore = [
 			'name'		=>$data['name'],
 			'email'		=>$data['email'],
-			'password'	=>$data['password']
+			'password'	=>bcrypt($data['password']),
 		];
 		$result = User::create($dataToStore);
 		if(! $result){
