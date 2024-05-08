@@ -71,61 +71,16 @@ class StoreController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $dataToReturn = [
-            'data'      => [],
-            'status'    => false
-        ];
+       
+        $objBuilder         = new StoreBuilder();
+        $dataToReturn       = $objBuilder->update($request, $id);
 
-        try {
-
-            \DB::beginTransaction();
-
-
-            $data = $request->all();            
-            
-            $storeDomainObj = new StoreDomain();
-            $response = $storeDomainObj->update($id, $data);
-
-
-            \DB::commit();
-
-            $dataToReturn['data']   = $response;
-            $dataToReturn['state']  = true;
-
-            return response()->json($dataToReturn, 200);
-
-        } catch (StoreException $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 400);
-
-        }catch (\Exception $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 500);
-
-        }catch (\Error $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-            return response()->json($dataToReturn, 500);
-            
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
         }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
     /**
@@ -133,115 +88,29 @@ class StoreController extends Controller
      */
     public function destroy(string $id)
     {
-        $dataToReturn = [
-            'data'      => [],
-            'status'    => false
-        ];
         
-        try {
+        $objBuilder         = new StoreBuilder();
+        $dataToReturn       = $objBuilder->destroy($id);
 
-            \DB::beginTransaction();
-     
-            
-            $storeDomainObj = new StoreDomain();
-            $response = $storeDomainObj->destroy($id);
-
-
-            \DB::commit();
-
-            $dataToReturn['data']   = 'Store removed successfully';
-            $dataToReturn['state']  = true;
-
-            return response()->json($dataToReturn, 200);
-
-        } catch (StoreException $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 400);
-
-        }catch (\Exception $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 500);
-
-        }catch (\Error $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-            return response()->json($dataToReturn, 500);
-            
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
         }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
     public function add_boock(Request $request, string $store_id, string $book_id)
     {
-        $dataToReturn = [
-            'data'      => [],
-            'status'    => false
-        ];
         
-        try {
+        $objBuilder         = new StoreBuilder();
+        $dataToReturn       = $objBuilder->add_boock($request, $store_id, $book_id);
 
-            \DB::beginTransaction();
-     
-            $data = $request->all();
-            $storeDomainObj = new StoreDomain();
-            $response = $storeDomainObj->add_boock($store_id, $book_id, $data);
-
-
-            \DB::commit();
-
-            $dataToReturn['data']   = 'Store removed successfully';
-            $dataToReturn['state']  = true;
-
-            return response()->json($dataToReturn, 200);
-
-        } catch (StoreException $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 400);
-
-        }catch (\Exception $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-
-            return response()->json($dataToReturn, 500);
-
-        }catch (\Error $e) {
-
-            \DB::rollback();
-
-            $msg  = $e->getMessage();
-            $dataToReturn['data']   = $msg;
-            $dataToReturn['state']  = false;
-            return response()->json($dataToReturn, 500);
-            
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
         }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 }

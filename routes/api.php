@@ -33,16 +33,14 @@ Route::group(['middleware' => ['auth:api']], function () {
 	Route::put('/store/update/{id}', ['as' => 'store.update', 'uses' => 'App\Http\Controllers\StoreController@update']);
 	Route::get('/store/show/{id}', ['as' => 'store.show', 'uses' => 'App\Http\Controllers\StoreController@show']);
 	Route::delete('/store/destroy/{id}', ['as' => 'store.destroy', 'uses' => 'App\Http\Controllers\StoreController@destroy']);
-
-
 	Route::post('/store/{store_id}/book/{book_id}', ['as' => 'store.add_boock', 'uses' => 'App\Http\Controllers\StoreController@add_boock']);
-
 
 	Route::get('/book/index', ['as' => 'book.index', 'uses' => 'App\Http\Controllers\BookController@index']);
 	Route::post('/book/store', ['as' => 'book.store', 'uses' => 'App\Http\Controllers\BookController@store']);
 	Route::put('/book/update/{id}', ['as' => 'book.update', 'uses' => 'App\Http\Controllers\BookController@update']);
 	Route::get('/book/show/{id}', ['as' => 'book.show', 'uses' => 'App\Http\Controllers\BookController@show']);
 	Route::delete('/book/destroy/{id}', ['as' => 'book.destroy', 'uses' => 'App\Http\Controllers\BookController@destroy']);
+	Route::post('/book/store/{store_id}', ['as' => 'book.simple_store', 'uses' => 'App\Http\Controllers\BookController@storeBookSimple']);
 
 	/*Route::get('/usuario/index/{id_assistente?}', ['as' => 'usuario.index', 'uses' => 'UsuarioController@index']);
 	Route::post('/usuario/index/{id_assistente?}', ['as' => 'usuario.index', 'uses' => 'UsuarioController@index']);

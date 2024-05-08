@@ -22,9 +22,9 @@ value*/
 			'isbn'=>['regex:/^\d+$/'],
 		],
 		[
-			'name.required'=>'The book name is required',
-			'name.required'=>'The book name needs to have at least 1 characters and a maximum 255 characters',
-			'name.required'=>'The book name needs to have at least 1 characters and a maximum 255 characters',
+			'name.required'=>'The book name field is required',
+			'name.required'=>'The book name field needs to have at least 1 characters and a maximum 255 characters',
+			'name.required'=>'The book name field needs to have at least 1 characters and a maximum 255 characters',
 
 			'value.regex'=>'The book value needs to be in a decimal format',
 			'isbn.regex'=>'The book isbn field just acept numeric values',

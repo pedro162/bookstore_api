@@ -4,6 +4,7 @@ namespace App\Builder;
 
 use Illuminate\Http\Request;
 use App\Domain\BookDomain;
+use App\Domain\StoreDomain;
 use App\Exceptions\BookException;
 use App\Http\Controllers\Controller;
 
@@ -30,7 +31,7 @@ class BookBuilder extends Builder{
 
             \DB::commit();
 
-            if((!$response) || !(count($response) > 0)){
+            if(!$response){
                 $stCod 		= 404;
                 $response 	= [];
             }
@@ -169,7 +170,7 @@ class BookBuilder extends Builder{
 
             \DB::commit();
 
-            if((!$response) || !(count($response) > 0)){
+            if(!$response){
                 $stCod 		= 404;
                 $response 	= [];
             }
@@ -344,4 +345,73 @@ class BookBuilder extends Builder{
 
         return $dataToReturn;
     }
+
+
+    /**
+     * Create a new boook and add it within the specified store in storage.
+     */
+    public function storeBookSimple(Request $request, string $store_id)
+    {
+        $dataToReturn = [
+            'data'      =>  [],
+            'state'    =>  false
+        ];
+
+        $stCod = 200;
+
+        try {
+
+            \DB::beginTransaction();
+
+            $data = $request->all();            
+            
+            $storeDomainObj = new BookDomain();
+            $response = $storeDomainObj->create($data);
+
+            if($response){
+            	$storeDomainObj = new StoreDomain();
+            	$response 		= $storeDomainObj->add_boock($store_id, $response->id);
+            }
+
+            \DB::commit();
+
+            $dataToReturn['data']   = $response;
+            $dataToReturn['state']  = true;
+
+        } catch (BookException $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+            
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
+            $stCod 					= 400;
+
+        }catch (\Exception $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
+            $stCod 					= 500;
+
+        }catch (\Error $e) {
+
+            \DB::rollback();
+
+            $msg  = $e->getMessage();
+            $dataToReturn['data']   = $msg;
+            $dataToReturn['state']  = false;
+            $stCod 					= 500;
+            
+        }
+
+        $this->setHttpResponseCode($stCod);
+
+        return $dataToReturn;
+    }
+    
 }

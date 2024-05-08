@@ -173,12 +173,7 @@ class StoreDomain{
 			'user_id' => \Auth::User()->id
 		];
 		$relationShip    = $storeObject->addBook($bookObject, $dataRelationship);
-
-		if (!$relationShip) {
-			$book_id = $bookObject->id;
-			throw new StoreException("Something went wrong. It was not possible to create the relationship between the store {$idStore} and the book {$book_id}. Please try again or contact support.");
-		}
-
+		
 		return $storeObject;
     } 
 }

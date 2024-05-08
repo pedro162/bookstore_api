@@ -50,6 +50,24 @@ class BookController extends Controller
         return response()->json($dataToReturn, $httpResposeCode);
     }
 
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function storeBookSimple(Request $request, string $store_id)
+    {
+        
+        $objBuilder         = new BookBuilder();
+        $dataToReturn       = $objBuilder->storeBookSimple($request, $store_id);
+
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
+        }
+
+        return response()->json($dataToReturn, $httpResposeCode);
+    }
+
     /**
      * Display the specified resource.
      */

@@ -21,7 +21,7 @@ class Store extends Model
     ];
 
     public function book(){
-    	return $this->belongsToMany(Book::class, 'book_store', 'store_id', 'book_id' );
+    	return $this->belongsToMany(Book::class, 'book_stores', 'store_id', 'book_id' );
     } 
 
 	public function addBook($book, $dados)
