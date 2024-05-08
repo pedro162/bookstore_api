@@ -96,10 +96,10 @@ class BookController extends Controller
 
             \DB::beginTransaction();
 
-            $dados = $request->all();            
+            $data = $request->all();            
             
             $storeDomainObj = new BookDomain();
-            $response = $storeDomainObj->create($dados);
+            $response = $storeDomainObj->create($data);
 
             \DB::commit();
 
@@ -223,10 +223,10 @@ class BookController extends Controller
             \DB::beginTransaction();
 
 
-            $dados = $request->all();            
+            $data = $request->all();            
             
             $storeDomainObj = new BookDomain();
-            $response = $storeDomainObj->update($id, $dados);
+            $response = $storeDomainObj->update($id, $data);
 
 
             \DB::commit();

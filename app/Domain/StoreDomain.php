@@ -6,6 +6,7 @@ use App\Validators\StoreValidator;
 use Illuminate\Support\Facades\Auth; 
 use App\Exceptions\StoreException;
 use App\Models\Store;
+use App\Models\Book;
 
 class StoreDomain{
 

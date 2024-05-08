@@ -92,10 +92,10 @@ class StoreController extends Controller
 
             \DB::beginTransaction();
 
-            $dados = $request->all();            
+            $data = $request->all();            
             
             $storeDomainObj = new StoreDomain();
-            $response       = $storeDomainObj->create($dados);
+            $response       = $storeDomainObj->create($data);
 
             \DB::commit();
 
@@ -120,7 +120,7 @@ class StoreController extends Controller
 
             \DB::rollback();
 
-            $msg  = $e->getMessage().' - '.$e->getLine();
+            $msg  = $e->getMessage();
 
             $dataToReturn['data']   = $msg;
             $dataToReturn['state']  = false;
@@ -131,8 +131,8 @@ class StoreController extends Controller
 
             \DB::rollback();
 
+            $msg  = $e->getMessage();
             //$msg  = $e->getMessage().' - '.$e->getLine().' - '.$e->getFile();
-            $msg  = $e->getMessage().' - '.$e->getLine().' - '.$e->getFile();
             $dataToReturn['data']   = $msg;
             $dataToReturn['state']  = false;
             return response()->json($dataToReturn, 500);
@@ -217,10 +217,10 @@ class StoreController extends Controller
             \DB::beginTransaction();
 
 
-            $dados = $request->all();            
+            $data = $request->all();            
             
             $storeDomainObj = new StoreDomain();
-            $response = $storeDomainObj->update($id, $dados);
+            $response = $storeDomainObj->update($id, $data);
 
 
             \DB::commit();
@@ -277,9 +277,7 @@ class StoreController extends Controller
         try {
 
             \DB::beginTransaction();
-
-
-            $dados = $request->all();            
+     
             
             $storeDomainObj = new StoreDomain();
             $response = $storeDomainObj->destroy($id);
