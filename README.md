@@ -74,12 +74,10 @@ The API uses the Password Grant Type authentication. This means that users can o
 POST /login
 Content-Type: application/json
 
-	...Body:
-`{
+	...Body:`{
 	"name":"admin",
 	"email":"admin@gmail.com",
-	"password":23456
-}`
+	"password":23456}`
 
 ### Login
 
@@ -88,12 +86,9 @@ Content-Type: application/json
 POST /login
 Content-Type: application/json
 
-	...Body:
-`{
+	...Body:`{
 	"email": "admin@gmail.com",
-	"password": "123456"
-}
-`
+	"password": "123456"}`
 
 ### Logout
 
@@ -110,12 +105,10 @@ POST /store/store
 Content-Type: application/json
 Authorization: Bearer {token}
 
-	...Body:
-`{
+	...Body:`{
 	"name": "My Bookstore",
 	"address": "123 Example Street",
-	"active": true
-}`
+	"active": true}`
 
 ### Create a New Book in an Existing Store
 
@@ -125,12 +118,10 @@ POST /book/store/{store_id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
-	...Body:
-`{
+	...Body:`{
 	"name": "Interesting Book",
 	"isbn": "978-3-16-148410-0",
-	"value": 29.99
-}`
+	"value": 29.99}`
 
 ### Create a New Book without an Existing Store
 
@@ -140,12 +131,10 @@ POST /book/store
 Content-Type: application/json
 Authorization: Bearer {token}
 
-	...Body:
-`{
+	...Body:`{
 	"name": "Interesting Book",
 	"isbn": "978-3-16-148410-0",
-	"value": 29.99
-}`
+	"value": 29.99}`
 
 ### Create a New Book without an Existing Store
 
@@ -155,12 +144,10 @@ POST /book/store
 Content-Type: application/json
 Authorization: Bearer {token}
 
-	...Body:
-`{
+	...Body:`{
 	"name": "Interesting Book",
 	"isbn": "9783161484100",
-	"value": 29.99
-}`
+	"value": 29.99}`
 
 ### Link a Book to an Existing Store
 
@@ -192,12 +179,10 @@ PUT /store/update/{id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
-	...Body:
-`{
+	...Body:`{
 	"name": "New Store Name",
 	"address": "New Store Address",
-	"active": true
-}`
+	"active": true}`
 
 ### Delete a Specific Store
 
@@ -230,8 +215,7 @@ Authorization: Bearer {token}
 	...Body:`{
 	"name": "New Book Name",
 	"isbn": "New Book ISBN",
-	"value": 39.99
-}`
+	"value": 39.99}`
 
 ### Delete a Specific Book
 
