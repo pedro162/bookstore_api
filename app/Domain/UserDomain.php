@@ -3,12 +3,23 @@
 namespace App\Domain;
 
 use Illuminate\Support\Facades\Auth; 
-use App\Exception\UserException;
+use App\Exceptions\UserException;
 use App\Models\User;
 use App\Validators\UserValidator;
 
 
 class UserDomain{
+
+	protected bool $canLogin;
+
+	public function setCanLogin(bool $canLogin){
+		$this->canLogin = $canLogin;
+	}
+
+
+	public function getCanLogin(){
+		return $this->canLogin;
+	}
 
 	public function index(){
 
@@ -29,11 +40,19 @@ class UserDomain{
 			$strErros = implode(', ', $erros);
 			throw new UserException($strErros);
 		}
-		
+
+		$userOfEmail = User::where('email', '=',trim($dataToStore['email']))->first();
+
+		if($userOfEmail){
+			throw new UserException("The e-mail informed already exist");
+		}
+
 		$result = User::create($dataToStore);
 		if(! $result){
 			throw new UserException("Something went wrong. It was not possible to create a new user. Please try again or contact support");
 		}
+		
+		$this->setCanLogin(true);
 
 		return $result;
 	}
@@ -85,7 +104,7 @@ class UserDomain{
 		$dataToStore = [
 			'name'		=>$data['name'] ?? $storeObject->name,
 			'email'		=>$data['email'] ?? $storeObject->email,
-			'password'	=>bcrypt($data['password']),
+			'password'	=>$data['password'],
 		];
 
 		//----- Validate infomations ----------------------------------------------
@@ -96,6 +115,7 @@ class UserDomain{
 			throw new UserException($strErros);
 		}
 
+		$dataToStore['password'] = bcrypt($dataToStore['password']);
 		//----- Update to load the record -------------------------------------------
 		$storeObject->update($dataToStore);
 
@@ -121,22 +141,7 @@ class UserDomain{
 			$strErro = "It was not possible to locale the store of code number {$id}";
 			throw new UserException($strErro);
 		}
-		
-		//---- Turn the record inactivated ------------
-		$dataToStore = ['active'=>'no'];
-		$storeObject->update($dataToStore);
-
-		$dataBooks = $storeObject->book();
-		//------- Break the relationship witho book --------------------------------
-		if($dataBooks){
-			foreach($dataBooks as $book){
-				if($book){
-					$storeObject->removeBook($book);
-				}
-			}
-		}
-
-		
+				
 		//---- I'm using soft delete, that's why I can do this ------------
 		$storeObject->delete();
 

@@ -1,87 +1,82 @@
 # API Laravel 11
 
-Esta é uma API desenvolvida em Laravel 11 utilizando PHP 8.2. A API utiliza o sistema de autenticação Passport do Laravel e o banco de dados SQLite. É configurada para ser executada usando Docker Compose na porta localhost:9000.
+This is an API developed in Laravel 11 using PHP 8.2. The API utilizes Laravel's Passport authentication system and SQLite database. It is configured to run using Docker Compose on port localhost:9000.
 
-## Funcionalidades
+## Features
 
-## Como Rodar
+## How to Run
 
-1. Certifique-se de ter o Docker e o Docker Compose instalados em seu sistema.
-2. Clone este repositório em sua máquina local:
-   git clone https://github.com/pedro162/bookstore_api.git
-
-3. Clone este repositório em sua máquina local:
+1. Make sure you have Docker and Docker Compose installed on your system.
+2. Clone this repository to your local machine:
+	git clone https://github.com/pedro162/bookstore_api.git
+3. Navigate to the project directory:
 	cd bookstore_api
-4. Renomeie o arquivo .env.example para .env:
+4. Rename the .env.example file to .env:
 	cp .env.example .env
-5. Instale as dependências do Composer:
+5. Install Composer dependencies:
 	composer install
-6. Gere a chave da aplicação:
+6. Generate the application key:
 	php artisan key:generate
-7. Execute as migrations para configurar o banco de dados:
+7. Run the migrations to set up the database:
 	php artisan migrate
-8. Inicie o servidor Laravel:
+8. Start the Laravel server:
 	php artisan serve
 
 
-### Autenticação
+### Authentication
 
-A API utiliza o Grant Type de autenticação do tipo Password. Isso significa que os usuários podem obter um token de acesso fornecendo seu nome de usuário e senha através da rota `/login`. O token gerado é então usado para autenticar as solicitações subsequentes.
+The API uses the Password Grant Type authentication. This means that users can obtain an access token by providing their username and password through the /login route. The generated token is then used to authenticate subsequent requests.
 
+### Authentication Routes
 
-#### Rotas de Autenticação
+- POST /login: Authenticates the user and generates an access token.
+- POST /logout: Revokes the user's access token, logging them out.
 
-- POST `/login`: Autentica o usuário e gera um token de acesso.
-- POST `/logout`: Revoga o token de acesso do usuário, efetuando logout.
+### API Resources
 
-### Recursos da API
-
-
-
-#### User
-
-- GET `/user/index`: Retorna uma lista de todos os usuários cadastrados.
-- POST `/user/store`: Cria um novo usuário e retorna o token para realizar requisições na api.
-- PUT `/user/update/{id}`: Atualiza os detalhes de um usuário específico.
+### User
+- GET /user/index: Returns a list of all registered users.
+- POST /user/store: Creates a new user and returns the token to make requests to the API.
+- PUT /user/update/{id}: Updates the details of a specific user.
 
 #### Store
 
-- GET `/store/index`: Retorna uma lista de todas as lojas cadastradas.
-- POST `/store/store`: Cria uma nova loja.
-- PUT `/store/update/{id}`: Atualiza os detalhes de uma loja específica.
-- GET `/store/show/{id}`: Retorna os detalhes de uma loja específica.
-- DELETE `/store/destroy/{id}`: Exclui uma loja específica.
-- POST `/store/{store_id}/book/{book_id}`: Vincula um livro existente a uma loja existente.
+- GET /store/index: Returns a list of all registered stores.
+- POST /store/store: Creates a new store.
+- PUT /store/update/{id}: Updates the details of a specific store.
+- GET /store/show/{id}: Returns the details of a specific store.
+- DELETE /store/destroy/{id}: Deletes a specific store.
+- POST /store/{store_id}/book/{book_id}: Links an existing book to an existing store.
 
 #### Book
 
-- GET `/book/index`: Retorna uma lista de todos os livros cadastrados.
-- POST `/book/store/{store_id}`: Adiciona um novo livro a uma loja específica.
-- PUT `/book/update/{id}`: Atualiza os detalhes de um livro específico.
-- GET `/book/show/{id}`: Retorna os detalhes de um livro específico.
-- DELETE `/book/destroy/{id}`: Exclui um livro específico.
+- GET /book/index: Returns a list of all registered books.
+- POST /book/store/{store_id}: Adds a new book to a specific store.
+- PUT /book/update/{id}: Updates the details of a specific book.
+- GET /book/show/{id}: Returns the details of a specific book.
+- DELETE /book/destroy/{id}: Deletes a specific book.
 
-## Como Usar
+## How to Use
 
-1. Certifique-se de ter o Docker e o Docker Compose instalados em seu sistema.
-2. Clone este repositório em sua máquina local.
-3. Navegue até o diretório do projeto e execute o seguinte comando no terminal: docker-compose up
-4. Após o contêiner Docker estar em execução, a API estará disponível em `http://localhost:9000`.
-5. Para acessar as rotas protegidas que requerem autenticação, primeiro cadastre um usuario e senha enviando uma solicitação POST para `/user/store` com o nome de usuário e senha. Ao realizar essa operação, a API irá devolver um TOKEN de autorização pra inluir no cabeçalho das solicitações bubsequentes
-6. Para acessar as rotas protegidas que requerem autenticação, primeiro faça login enviando uma solicitação POST para `/login` com o nome de usuário e senha.
-7. Use o token de acesso retornado para autenticar as solicitações subsequentes, incluindo-o no cabeçalho `Authorization`.
+1. Make sure you have Docker and Docker Compose installed on your system.
+2. Clone this repository to your local machine.
+3. Navigate to the project directory and run the following command in the terminal: docker-compose up
+4. Once the Docker container is running, the API will be available at http://localhost:9000.
+5. To access protected routes that require authentication, first register a user and password by sending a POST request to /user/store with the username and password. Upon successful registration, the API will return an authorization TOKEN to include in the header of subsequent requests.
+6. To access protected routes that require authentication, first login by sending a POST request to /login with the username and password.
+7. Use the returned access token to authenticate subsequent requests by including it in the Authorization header.
 
-## Exemplos de Requisição
+## Request Examples
 
-### Novo usuário
+### New User
 
 POST /login
 Content-Type: application/json
 
 {
-	"name":"admin",
-    "email":"admin@gmail.com",
-    "password":23456
+"name":"admin",
+"email":"admin@gmail.com",
+"password":23456
 }
 
 ### Login
@@ -90,8 +85,8 @@ POST /login
 Content-Type: application/json
 
 {
-	"email": "admin@gmail.com",
-	"password": "123456"
+"email": "admin@gmail.com",
+"password": "123456"
 }
 
 ### Logout
@@ -99,112 +94,110 @@ Content-Type: application/json
 POST /logout
 Authorization: Bearer {token}
 
-### Criar uma Nova Loja
+### Create a New Store
 
 POST /store/store
 Content-Type: application/json
 Authorization: Bearer {token}
 
 {
-  "name": "Minha Livraria",
-  "address": "Rua Exemplo, 123",
-  "active": true
+"name": "My Bookstore",
+"address": "123 Example Street",
+"active": true
 }
 
-### Criar um Novo Livro em uma Loja Existente
+### Create a New Book in an Existing Store
 
 POST /book/store/{store_id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
 {
-  "name": "Livro Interessante",
-  "isbn": "978-3-16-148410-0",
-  "value": 29.99
+"name": "Interesting Book",
+"isbn": "978-3-16-148410-0",
+"value": 29.99
 }
 
-### Criar um Novo Livro sem uma Loja Existente
+### Create a New Book without an Existing Store
 
 POST /book/store
 Content-Type: application/json
 Authorization: Bearer {token}
 
 {
-  "name": "Livro Interessante",
-  "isbn": "978-3-16-148410-0",
-  "value": 29.99
+"name": "Interesting Book",
+"isbn": "978-3-16-148410-0",
+"value": 29.99
 }
 
-### Criar um Novo Livro sem uma Loja Existente
+### Create a New Book without an Existing Store
 
 POST /book/store
 Content-Type: application/json
 Authorization: Bearer {token}
 
 {
-  "name": "Livro Interessante",
-  "isbn": "9783161484100",
-  "value": 29.99
+"name": "Interesting Book",
+"isbn": "9783161484100",
+"value": 29.99
 }
 
-
-### Vincular um Livro a uma Loja Existente
+### Link a Book to an Existing Store
 
 POST /store/{store_id}/book/{book_id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
-### Listar Todas as Lojas
+### List All Stores
 
 GET /store/index
 Authorization: Bearer {token}
 
-### Mostrar Detalhes de uma Loja Específica
+### Show Details of a Specific Store
 
 GET /store/show/{id}
 Authorization: Bearer {token}
 
-
-### Atualizar os Detalhes de uma Loja Específica
+### Update Details of a Specific Store
 
 PUT /store/update/{id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
 {
-  "name": "Nova Nome da Loja",
-  "address": "Nova Endereço da Loja",
-  "active": true
+"name": "New Store Name",
+"address": "New Store Address",
+"active": true
 }
 
-### Excluir uma Loja Específica
+### Delete a Specific Store
 
 DELETE /store/destroy/{id}
 Authorization: Bearer {token}
 
-### Listar Todos os Livros
+### List All Books
 
 GET /book/index
 Authorization: Bearer {token}
 
-### Mostrar Detalhes de um Livro Específico
+### Show Details of a Specific Book
 
 GET /book/show/{id}
 Authorization: Bearer {token}
 
-### Atualizar os Detalhes de um Livro Específico
+### Update Details of a Specific Book
 
 PUT /book/update/{id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
 {
-  "name": "Novo Nome do Livro",
-  "isbn": "Novo ISBN do Livro",
-  "value": 39.99
+"name": "New Book Name",
+"isbn": "New Book ISBN",
+"value": 39.99
 }
 
-### Excluir um Livro Específico
+### Delete a Specific Book
 
 DELETE /book/destroy/{id}
-Authorization: Bearer {token}
+Authorization: Bearer {token}"

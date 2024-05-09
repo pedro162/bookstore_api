@@ -78,7 +78,7 @@ class UserBuilder extends Builder{
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, bool $login=true)
     {
         $dataToReturn = [
             'data'  => [],
@@ -95,6 +95,14 @@ class UserBuilder extends Builder{
             
             $storeDomainObj = new UserDomain();
             $response       = $storeDomainObj->create($data);
+            
+            if($login){
+                $canLogin       = $storeDomainObj->getCanLogin();
+                
+                if($canLogin){
+                    $dataToReturn   = $this->login($request);
+                }
+            }
 
             \DB::commit();
 

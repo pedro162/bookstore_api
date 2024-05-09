@@ -39,6 +39,7 @@ Route::group(['middleware' => ['check_auth','auth:api']], function () {
 	Route::delete('/book/destroy/{id}', ['as' => 'book.destroy', 'uses' => 'App\Http\Controllers\BookController@destroy']);
 
 	//----User routes------------------------------------------------------------------------------------------------------------------------
+	Route::get('/user/index', ['as' => 'user.index', 'uses' => 'App\Http\Controllers\UserController@index']);
 	Route::put('/user/update/{id}', ['as' => 'user.update', 'uses' => 'App\Http\Controllers\UserController@update']);
 	Route::get('/user/show/{id}', ['as' => 'user.show', 'uses' => 'App\Http\Controllers\UserController@show']);
 	Route::delete('/user/destroy/{id}', ['as' => 'user.destroy', 'uses' => 'App\Http\Controllers\UserController@destroy']);

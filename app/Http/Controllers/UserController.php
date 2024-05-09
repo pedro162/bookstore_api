@@ -11,10 +11,7 @@ class UserController extends Controller
         header('Access-Control-Allow-Origin: *');
     }
     
-    public function __construct(){
-        header('Access-Control-Allow-Origin: *');
-    }
-    
+
     /**
      * Display a listing of the resource.
      */
