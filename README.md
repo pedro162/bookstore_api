@@ -227,8 +227,7 @@ PUT /book/update/{id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
-	...Body:
-`{
+	...Body:`{
 	"name": "New Book Name",
 	"isbn": "New Book ISBN",
 	"value": 39.99
