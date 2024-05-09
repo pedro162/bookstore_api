@@ -11,9 +11,6 @@ class BookValidator{
 
 	public static function validateDataToCreateBook(array $data = []):array{
 
-		/*name
-isbn
-value*/
 
 		$errors = [];
 		$validator = Validator::make($data, [

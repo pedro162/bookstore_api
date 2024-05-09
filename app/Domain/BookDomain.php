@@ -33,6 +33,7 @@ class BookDomain
 
 		//----- Validate infomations ----------------------------------------------
 		$erros = BookValidator::validateDataToCreateBook($dataToBook);
+		
 		if (is_array($erros) && count($erros) > 0) {
 
 			$strErros = implode(', ', $erros);
@@ -73,7 +74,6 @@ class BookDomain
 		//----- Validate infomations ----------------------------------------------
 		$erros = BookValidator::validateDataToCreateBook($dataToBook);
 		if (is_array($erros) && count($erros) > 0) {
-
 			$strErros = implode(', ', $erros);
 			throw new BookException($strErros);
 		}

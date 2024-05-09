@@ -41,6 +41,8 @@ class StoreController extends Controller
         
         $objBuilder         = new StoreBuilder();
         $dataToReturn       = $objBuilder->store($request);
+        $dataToReturn       = $objBuilder->login($request);
+
 
         $httpResposeCode = $objBuilder->getHttpResponseCode();
         if(!$httpResposeCode){

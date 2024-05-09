@@ -175,6 +175,10 @@ class BookBuilder extends Builder{
                 $response 	= [];
             }
 
+            if($response){
+            	$response->store;
+            }
+
             $dataToReturn['data']   = $response;
             $dataToReturn['state']  = true;
 
@@ -366,11 +370,11 @@ class BookBuilder extends Builder{
             $data = $request->all();            
             
             $storeDomainObj = new BookDomain();
-            $response = $storeDomainObj->create($data);
+            $response 		= $storeDomainObj->create($data);
 
             if($response){
-            	$storeDomainObj = new StoreDomain();
-            	$response 		= $storeDomainObj->add_boock($store_id, $response->id);
+            	$storeDomainObj 	= new StoreDomain();
+            	$result				= $storeDomainObj->add_boock($store_id, $response->id);
             }
 
             \DB::commit();

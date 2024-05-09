@@ -142,7 +142,6 @@ class StoreDomain{
 			}
 		}
 
-
 		
 		//---- I'm using soft delete, that's why I can do this ------------
 		$storeObject->delete();

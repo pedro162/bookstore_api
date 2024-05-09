@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Builder\UserBuilder;
 
 class UserController extends Controller
 {
+    public function __construct(){
+        header('Access-Control-Allow-Origin: *');
+    }
+    
     public function __construct(){
         header('Access-Control-Allow-Origin: *');
     }
@@ -15,23 +20,34 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        
+        $objBuilder         = new UserBuilder();
+        $dataToReturn       = $objBuilder->index();
+
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
+        }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        
+        $objBuilder         = new UserBuilder();
+        $dataToReturn       = $objBuilder->store($request);
+
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
+        }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
     /**
@@ -39,15 +55,15 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
+        $objBuilder         = new UserBuilder();
+        $dataToReturn       = $objBuilder->show($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
+        }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
     /**
@@ -55,7 +71,16 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+       
+        $objBuilder         = new UserBuilder();
+        $dataToReturn       = $objBuilder->update($request, $id);
+
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
+        }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 
     /**
@@ -63,6 +88,15 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        
+        $objBuilder         = new UserBuilder();
+        $dataToReturn       = $objBuilder->destroy($id);
+
+        $httpResposeCode = $objBuilder->getHttpResponseCode();
+        if(!$httpResposeCode){
+            $httpResposeCode = 200;
+        }
+
+        return response()->json($dataToReturn, $httpResposeCode);
     }
 }
