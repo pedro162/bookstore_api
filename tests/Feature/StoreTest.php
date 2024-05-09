@@ -84,8 +84,17 @@ class StoreTest extends TestCase
         ]);
 
         $response->assertStatus(201);
-        $store_id = $response->json('id');
+        
+        $content = $response->getContent(); // Get the content as a JSON string
+		$data = json_decode($content, true); // Turn JSON String into an array
 
+		$data = $data['data'] ?? [];
+
+		$store_id = $data['id'] ?? $response->json('id');
+
+        //echo 'route: '.$this->urlBase.'/store/show/'.$store_id;
+        //$this->showRequestResponse($response);
+        
         // Test showing a specific store
         $response = $this->getJson($this->urlBase.'/store/show/' . $store_id, [
             'Authorization' => 'Bearer ' . $token,
@@ -120,6 +129,6 @@ class StoreTest extends TestCase
 
 		$message = $data['data'] ?? [];
 		echo 'Response: ';
-		echo $message;
+		print_r($message);
     }
 }

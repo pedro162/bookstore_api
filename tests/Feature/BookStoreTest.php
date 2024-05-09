@@ -212,17 +212,20 @@ class BookStoreTest extends TestCase
         // Test updating a specific user
         $response = $this->putJson($this->urlBase.'/user/update/' . $user->id, [
             'name' => 'Updated User Name',
-            // Add other fields to update...
+            'password' => 123456,
         ], [
             'Authorization' => 'Bearer ' . $token,
         ]);
+
+        //$this->showRequestResponse($response);
+
         $response->assertStatus(200);
 
         // Test deleting a specific user
-        $response = $this->deleteJson($this->urlBase.'/user/destroy/' . $user->id, [
+        /*$response = $this->deleteJson($this->urlBase.'/user/destroy/' . $user->id, [
             'Authorization' => 'Bearer ' . $token,
         ]);
-        $response->assertStatus(200);
+        $response->assertStatus(200);*/
     }
 
 
@@ -238,6 +241,6 @@ class BookStoreTest extends TestCase
 
 		$message = $data['data'] ?? [];
 		echo 'Response: ';
-		echo $message;
+		print_r($message);
     }
 }

@@ -84,7 +84,13 @@ class BookTest extends TestCase
         ]);
 
         $response->assertStatus(201);
-        $book_id = $response->json('id');
+        $content = $response->getContent(); // Get the content as a JSON string
+		
+		$data = json_decode($content, true); // Turn JSON String into an array
+
+		$data = $data['data'] ?? [];
+
+		$book_id = $data['id'] ?? $response->json('id');
 
         // Test showing a specific book
         ///book/show/
@@ -129,7 +135,7 @@ class BookTest extends TestCase
 
 		$message = $data['data'] ?? [];
 		echo 'Response: ';
-		echo $message;
+		print_r($message);
     }
 
 }

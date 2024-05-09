@@ -104,7 +104,7 @@ class UserDomain{
 		$dataToStore = [
 			'name'		=>$data['name'] ?? $storeObject->name,
 			'email'		=>$data['email'] ?? $storeObject->email,
-			'password'	=>$data['password'],
+			'password'	=>$data['password'] ?? '',
 		];
 
 		//----- Validate infomations ----------------------------------------------
