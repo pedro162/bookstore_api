@@ -69,80 +69,102 @@ The API uses the Password Grant Type authentication. This means that users can o
 ## Request Examples
 
 ### New User
+	...Header:
 
 POST /login
 Content-Type: application/json
 
-{
-"name":"admin",
-"email":"admin@gmail.com",
-"password":23456
-}
+	...Body:
+`{
+	"name":"admin",
+	"email":"admin@gmail.com",
+	"password":23456
+}`
 
 ### Login
 
+	...Header:
+
 POST /login
 Content-Type: application/json
 
-{
-"email": "admin@gmail.com",
-"password": "123456"
+	...Body:
+`{
+	"email": "admin@gmail.com",
+	"password": "123456"
 }
+`
 
 ### Logout
+
+	...Header:
 
 POST /logout
 Authorization: Bearer {token}
 
 ### Create a New Store
 
+	...Header:
+
 POST /store/store
 Content-Type: application/json
 Authorization: Bearer {token}
 
-{
-"name": "My Bookstore",
-"address": "123 Example Street",
-"active": true
-}
+	...Body:
+`{
+	"name": "My Bookstore",
+	"address": "123 Example Street",
+	"active": true
+}`
 
 ### Create a New Book in an Existing Store
+
+	...Header:
 
 POST /book/store/{store_id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
-{
-"name": "Interesting Book",
-"isbn": "978-3-16-148410-0",
-"value": 29.99
-}
+	...Body:
+`{
+	"name": "Interesting Book",
+	"isbn": "978-3-16-148410-0",
+	"value": 29.99
+}`
 
 ### Create a New Book without an Existing Store
+
+	...Header:
 
 POST /book/store
 Content-Type: application/json
 Authorization: Bearer {token}
 
-{
-"name": "Interesting Book",
-"isbn": "978-3-16-148410-0",
-"value": 29.99
-}
+	...Body:
+`{
+	"name": "Interesting Book",
+	"isbn": "978-3-16-148410-0",
+	"value": 29.99
+}`
 
 ### Create a New Book without an Existing Store
+
+	...Header:
 
 POST /book/store
 Content-Type: application/json
 Authorization: Bearer {token}
 
-{
-"name": "Interesting Book",
-"isbn": "9783161484100",
-"value": 29.99
-}
+	...Body:
+`{
+	"name": "Interesting Book",
+	"isbn": "9783161484100",
+	"value": 29.99
+}`
 
 ### Link a Book to an Existing Store
+
+	...Header:
 
 POST /store/{store_id}/book/{book_id}
 Content-Type: application/json
@@ -150,54 +172,72 @@ Authorization: Bearer {token}
 
 ### List All Stores
 
+	...Header:
+
 GET /store/index
 Authorization: Bearer {token}
 
 ### Show Details of a Specific Store
+
+	...Header:
 
 GET /store/show/{id}
 Authorization: Bearer {token}
 
 ### Update Details of a Specific Store
 
+	...Header:
+
 PUT /store/update/{id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
-{
-"name": "New Store Name",
-"address": "New Store Address",
-"active": true
-}
+	...Body:
+`{
+	"name": "New Store Name",
+	"address": "New Store Address",
+	"active": true
+}`
 
 ### Delete a Specific Store
+
+	...Header:
 
 DELETE /store/destroy/{id}
 Authorization: Bearer {token}
 
 ### List All Books
 
+	...Header:
+
 GET /book/index
 Authorization: Bearer {token}
 
 ### Show Details of a Specific Book
+
+	...Header:
 
 GET /book/show/{id}
 Authorization: Bearer {token}
 
 ### Update Details of a Specific Book
 
+	...Header:
+
 PUT /book/update/{id}
 Content-Type: application/json
 Authorization: Bearer {token}
 
-{
-"name": "New Book Name",
-"isbn": "New Book ISBN",
-"value": 39.99
-}
+	...Body:
+`{
+	"name": "New Book Name",
+	"isbn": "New Book ISBN",
+	"value": 39.99
+}`
 
 ### Delete a Specific Book
+
+	...Header:
 
 DELETE /book/destroy/{id}
 Authorization: Bearer {token}"
