@@ -223,7 +223,6 @@ Authorization: Bearer {token}
 ### Update Details of a Specific Book
 
 	...Header:
-
 PUT /book/update/{id}
 Content-Type: application/json
 Authorization: Bearer {token}
