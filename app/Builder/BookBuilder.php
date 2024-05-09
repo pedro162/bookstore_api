@@ -105,7 +105,7 @@ class BookBuilder extends Builder{
             $dataToReturn['data']   = $response;
             $dataToReturn['state']  = true;
 
-            $stCod = 200;
+            $stCod = 201;
 
         } catch (BookException $e) {
 

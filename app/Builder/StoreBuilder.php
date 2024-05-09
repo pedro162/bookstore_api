@@ -102,6 +102,7 @@ class StoreBuilder extends Builder{
 
             $dataToReturn['data']   = $response;
             $dataToReturn['state']  = true;
+            $stCod 					= 201;
 
         } catch (StoreException $e) {
 
