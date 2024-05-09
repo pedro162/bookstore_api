@@ -2,10 +2,8 @@
 
 This is an API implementation based on the document referenced below. It was developed in Laravel 11 using PHP 8.2. The API utilizes Laravel's Passport authentication system and SQLite database. It is also possible to run using Docker Compose on port localhost:9000.
 
-##Rereces
+##References
 ![Task](./SAS-Backend-Task-2024.docx)
-
-## Features
 
 ## How to Run
 
