@@ -70,6 +70,7 @@ The API uses the Password Grant Type authentication. This means that users can o
 
 ### New User
 
+...http
 POST /login
 Content-Type: application/json
 
