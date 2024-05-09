@@ -1,6 +1,6 @@
 # API Laravel 11
 
-This is an API developed in Laravel 11 using PHP 8.2. The API utilizes Laravel's Passport authentication system and SQLite database. It is configured to run using Docker Compose on port localhost:9000.
+This is an API developed in Laravel 11 using PHP 8.2. The API utilizes Laravel's Passport authentication system and SQLite database. It is also possible to run using Docker Compose on port localhost:9000.
 
 ## Features
 
