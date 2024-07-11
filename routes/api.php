@@ -15,8 +15,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 
-Route::post('/user/store', 'App\Http\Controllers\UserController@store');
-Route::post('/login', 'App\Http\Controllers\AuthController@login');
+Route::post('/user/store', 'App\Http\Controllers\UserController@store')->withoutMiddleware(['check_auth']);
+Route::post('/login', 'App\Http\Controllers\AuthController@login')->withoutMiddleware(['check_auth']);
 //Route::post('/logout', 'App\Http\Controllers\AuthController@logout')->middleware('auth:api');
 
 
