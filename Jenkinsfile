@@ -1,48 +1,60 @@
-pipeline{
-	agent any
+pipeline {
+    agent any
 
-	environment {
-		HOME = 'var/www/html/bookstore_api'
-	}
+    options {
+        skipDefaultCheckout() // Skip the default checkout to customize it later
+        timestamps() // Add timestamps to the console output
+        buildDiscarder(logRotator(numToKeepStr: '10')) // Example build discarder configuration
+    }
 
-	stages {
-		stage('Checkout'){
-			steps {
-				checkout scm
-			}
-		}
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Example using Composer to install dependencies
+                    sh 'composer install --no-ansi --no-interaction --no-progress --optimize-autoloader'
+                }
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                script {
+                    // Example running PHPUnit tests
+                    sh './vendor/bin/phpunit'
+                }
+            }
+        }
+        
+        stage('Run Code Analysis') {
+            steps {
+                script {
+                    // Example using PHP_CodeSniffer for code analysis
+                    sh './vendor/bin/phpcs --standard=PSR2 app/'
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                script {
+                    // Example deployment script using Laravel's Artisan command
+                    sh 'php artisan deploy'
+                }
+            }
+        }
+    }
 
-		stage('Install Dependencies'){
-			steps{
-				sh 'composer install --no-ansi --no-interaction --no-progress --no-scripts'
-			}
-		}
-
-		stage('Run Tests'){
-			steps{
-				sh './vendor/bin/phpunit'
-			}
-		}
-
-		stage('Run Code Analysis'){
-			steps{
-				sh './vendor/bin/php -l app'
-				// Add more steps as needed for code analysis tools like PHP_CodeSniffer, etc.
-			}
-		}
-
-		stage('Deploy'){
-			steps{
-				sh 'php artisan deploy'
-			}
-		}
-	}
-
-	options{
-		skipDefaultCheckout()
-		// Add the following option to include crumb in HTTP requests
-        ansiColor('xterm')
-        buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '3'))
-	} 
-
+    post {
+        always {
+            // Clean up workspace after every build
+            cleanWs()
+        }
+    }
 }
