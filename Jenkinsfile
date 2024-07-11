@@ -28,20 +28,11 @@ pipeline {
             steps {
                 script {
 
-                    
-                     // Debugging: Print the current working directory and its contents
-                    sh 'pwd'
-                    sh 'ls -la'
-
                     // Ensure the database directory exists
                     sh 'mkdir -p "/var/jenkins_home/workspace/Laravel Pipeline/database"'
 
-                    // Debugging: Print the contents after directory creation
-                    sh 'ls -la "/var/jenkins_home/workspace/Laravel Pipeline"'
-
                     // Create the SQLite database file
-                    sh 'touch "/var/jenkins_home/workspace/Laravel Pipeline/database/database.sqlite"' 'touch "/var/jenkins_home/workspace/Laravel Pipeline/database/database.sqlite"'
-
+                    sh 'touch "/var/jenkins_home/workspace/Laravel Pipeline/database/database.sqlite"'
                     sh 'cp .env.example .env'
                     sh 'php artisan key:generate'
                 }
@@ -62,7 +53,7 @@ pipeline {
             steps {
                 script {
                     // Example running PHPUnit tests
-                    sh './vendor/bin/phpunit'
+                    sh './vendor/bin/phpunit --log-junit ./build/logs/test-results.xml'
                 }
             }
         }
