@@ -14,11 +14,11 @@ pipeline {
                 checkout scm
             }
         }
-    	
-    	stage('Install Dependencies') {
+        
+        stage('Install Dependencies') {
             steps {
                 script {
-                     // Example: Specify full path to Composer executable
+                    // Example: Specify full path to Composer executable
                     sh '/usr/local/bin/composer install --no-ansi --no-interaction --no-progress --optimize-autoloader --ignore-platform-req=ext-dom --ignore-platform-req=ext-xml --ignore-platform-req=ext-curl'
                 }
             }
@@ -27,13 +27,17 @@ pipeline {
         stage('Set Up Environment') {
             steps {
                 script {
-
                     // Ensure the database directory exists
-                    sh 'mkdir -p "/var/jenkins_home/workspace/Laravel Pipeline/database"'
-
-                    // Create the SQLite database file
-                    sh 'touch "/var/jenkins_home/workspace/Laravel Pipeline/database/database.sqlite"'
-                    sh 'cp .env.example .env'
+                    sh 'mkdir -p "/var/jenkins_home/workspace/Laravel_Pipeline/database"'
+                    
+                    // Create the SQLite database file if not exists
+                    def databasePath = "${env.WORKSPACE}/database/database.sqlite"
+                    sh "[[ ! -f ${databasePath} ]] && touch ${databasePath}"
+                    
+                    // Copy .env.example if .env doesn't exist
+                    sh 'cp -n .env.example .env || true'
+                    
+                    // Generate Laravel application key
                     sh 'php artisan key:generate'
                 }
             }
@@ -42,8 +46,7 @@ pipeline {
         stage('Prepare Database') {
             steps {
                 script {
-                    def databasePath = "${env.WORKSPACE}/database/database.sqlite"
-                    sh "touch ${databasePath}"
+                    // Ensure the database migrations run against SQLite
                     sh "php artisan migrate --database=sqlite"
                 }
             }
@@ -52,7 +55,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Example running PHPUnit tests
+                    // Example running PHPUnit tests and saving results
                     sh './vendor/bin/phpunit --log-junit ./build/logs/test-results.xml'
                 }
             }
@@ -70,7 +73,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Example deployment script using Laravel's Artisan command
+                    // Placeholder for deployment script using Laravel's Artisan command
                     sh 'php artisan deploy'
                 }
             }
@@ -81,6 +84,7 @@ pipeline {
         always {
             // Clean up workspace after every build
             cleanWs()
+            // Archive JUnit test results
             junit '**/test-results.xml'
         }
     }
