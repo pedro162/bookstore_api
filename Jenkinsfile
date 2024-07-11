@@ -23,6 +23,25 @@ pipeline {
                 }
             }
         }
+
+        stage('Set Up Environment') {
+            steps {
+                script {
+                    sh 'cp .env.example .env'
+                    sh 'php artisan key:generate'
+                }
+            }
+        }
+
+        stage('Prepare Database') {
+            steps {
+                script {
+                    def databasePath = "${env.WORKSPACE}/database/database.sqlite"
+                    sh "touch ${databasePath}"
+                    sh "php artisan migrate --database=sqlite"
+                }
+            }
+        }
         
         stage('Run Tests') {
             steps {
