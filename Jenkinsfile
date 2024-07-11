@@ -32,7 +32,7 @@ pipeline {
                     
                     // Create the SQLite database file if not exists
                     def databasePath = "${env.WORKSPACE}/database/database.sqlite"
-                    sh "[[ ! -f ${databasePath} ]] && touch ${databasePath}"
+                    sh "if [ ! -f ${databasePath} ]; then touch ${databasePath}; fi"
                     
                     // Copy .env.example if .env doesn't exist
                     sh 'cp -n .env.example .env || true'
