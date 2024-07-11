@@ -28,12 +28,13 @@ pipeline {
             steps {
                 script {
 
+                    
                     // Ensure the database directory exists
-                    sh 'mkdir -p /var/jenkins_home/workspace/Laravel Pipeline/database'
+                    sh 'mkdir -p "/var/jenkins_home/workspace/Laravel Pipeline/database"'
 
                     // Create the SQLite database file
-                    sh 'touch /var/jenkins_home/workspace/Laravel Pipeline/database/database.sqlite'
-                    
+                    sh 'touch "/var/jenkins_home/workspace/Laravel Pipeline/database/database.sqlite"'
+
                     sh 'cp .env.example .env'
                     sh 'php artisan key:generate'
                 }
