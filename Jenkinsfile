@@ -8,6 +8,16 @@ pipeline {
     }
 
     stages {
+    	
+    	stage('Install Dependencies') {
+            steps {
+                script {
+                    // Example: Specify full path to Composer executable
+                    sh '/usr/local/bin/composer install --no-ansi --no-interaction --no-progress --optimize-autoloader'
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
